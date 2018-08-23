@@ -1,0 +1,100 @@
+﻿<form style="padding-top:1%; padding-bottom:1%;" class="col-md-6">
+    <div class="form-group row">
+        <label class="col-md-3">Nombre</label>
+        <input id="Name" type="text" class="form-control col-md-8" /> 
+    </div>
+    <div class="form-group row">
+        <label class="col-md-3">Apellido</label>
+        <input id="LastName" type="text" class="form-control col-md-8" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-3">Login</label>
+        <input id="Login" type="text" class="form-control col-md-8" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-3">Email</label>
+        <input id="Email" type="text" class="form-control col-md-8" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-3">Password</label>
+        <input id="Password" type="password" class="form-control col-md-8" />
+    </div>
+</form>
+<div style="padding:2%;">
+    <button class="btn btn-primary" id="SaveUser"> Registrar Usuario</button>
+</div>
+
+
+
+
+<div class="col-md-12">
+    <table class="table col-md-8 table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Nombre Completo</th>
+                <th>Login</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody id="CuerpoDeLaTabla"></tbody>
+    </table>
+</div>
+
+<script>
+
+    function CreateUserTable() {
+        return $('table').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+    }
+
+    var userTable = CreateUserTable();
+
+    function ListUserFromServer() {
+        $.get('/api/user/list')
+            .then(userList => {
+                userList.forEach(user => {
+                    AddUserToTable(user);
+                });
+                userTable.draw();
+            });
+    }
+
+    $('#SaveUser').click(() => {
+        var newUserData = getUserData();
+        $.post('/api/user/create', newUserData)
+            .then(registeredUser => {
+                AddUserToTable(registeredUser)
+                userTable.draw();
+                eraseUserData();
+            });
+    });
+
+    function getUserData() {
+        return {
+            "Names": $('#Name').val(),
+            "LastNames": $('#LastName').val(),
+            "Login": $('#Login').val(),
+            "Email": $('#Email').val(),
+            "Password": $('#Password').val()             
+        }
+    }
+
+    function eraseUserData() {
+        $('#Name').val('');
+        $('#LastName').val('');
+        $('#Login').val('');
+        $('#Email').val('');
+        $('#Password').val('');
+    }
+
+    function AddUserToTable(userData) {
+        userTable.row.add([userData.Id, userData.CompleteName, userData.Login, userData.Email]);
+    }
+
+    ListUserFromServer();
+</script>
