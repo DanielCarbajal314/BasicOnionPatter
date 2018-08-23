@@ -97,4 +97,14 @@
     }
 
     ListUserFromServer();
+
+    userTable.on('click', 'tr', () => {
+        var data = userTable.row(this).data();
+        console.log(data);
+    });
+
+    function UpdateTable(){
+        userTable.clear();
+        ListUserFromServer();
+    }
 </script>
