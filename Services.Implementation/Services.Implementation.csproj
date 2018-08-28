@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlPesistance\ClientManagerSQL.cs" />
     <Compile Include="SqlPesistance\UserManagerSQL.cs" />
   </ItemGroup>
   <ItemGroup>

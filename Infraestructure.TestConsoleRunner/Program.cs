@@ -12,11 +12,14 @@ namespace Infraestructure.TestConsoleRunner
     {
         static void Main(string[] args)
         {
-            DocumentContext db = new DocumentContext();
-            Document document = new Document();
-            document.Description = "asdasd";            
-            db.Documents.Add(document);
-            db.SaveChanges();
+            using (DocumentContext documentDb = new DocumentContext())
+            {
+                documentDb.Clients.ToList().ForEach(x =>
+                {
+                    Console.WriteLine(x.Name);
+                });
+                Console.ReadKey();
+            }
         }
     }
 }

@@ -12,7 +12,8 @@ namespace Infraestructure.SQLServerRepository.DocumentDB
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Document> Documents { get; set; }
-
+        public DbSet<Client> Clients { get; set; }
+        
         public DocumentContext() : base("DocumentDb") {
 
         }

@@ -41,10 +41,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\IGeneralManager.cs" />
+    <Compile Include="IClientManager.cs" />
     <Compile Include="IUserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Requests\CreateClient.cs" />
     <Compile Include="Requests\CreateUser.cs" />
+    <Compile Include="Requests\UpdateClient.cs" />
     <Compile Include="Requests\UpdateUser.cs" />
+    <Compile Include="Responses\RegisteredClient.cs" />
     <Compile Include="Responses\RegisteredUser.cs" />
   </ItemGroup>
   <ItemGroup />

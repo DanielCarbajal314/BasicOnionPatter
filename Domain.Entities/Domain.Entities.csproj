@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client.cs" />
+    <Compile Include="ClientType.cs" />
     <Compile Include="Common\BaseEntity.cs" />
     <Compile Include="Common\BaseEntityWithStringId.cs" />
     <Compile Include="User.cs" />
