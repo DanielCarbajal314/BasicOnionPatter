@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DocumentDB\DocumentContext.cs" />
+    <Compile Include="DocumentDB\SeedData\DocumentManagementDbInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
