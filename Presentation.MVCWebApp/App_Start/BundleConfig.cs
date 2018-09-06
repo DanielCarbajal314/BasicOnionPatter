@@ -25,6 +25,14 @@ namespace Presentation.MVCWebApp
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/Frameworks").Include(
+                    "~/Scripts/Frameworks/jquery.js",
+                    "~/Scripts/Frameworks/Knockout.js"
+                ));
+
+            BundleTable.EnableOptimizations = false;
+
         }
     }
 }
