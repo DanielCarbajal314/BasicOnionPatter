@@ -1,11 +1,12 @@
 ﻿<form style="padding-top:1%; padding-bottom:1%;" class="col-md-6">
+    <h4 data-bind="text: CompleteName"></h4>
     <div class="form-group row">
         <label class="col-md-3">Nombre</label>
-        <input id="Name" type="text" class="form-control col-md-8" data-bind="value: Names" />
+        <input id="Name" type="text" class="form-control col-md-8" data-bind="value: Names , valueUpdate: 'afterkeydown'" />
     </div>
     <div class="form-group row">
         <label class="col-md-3">Apellido</label>
-        <input id="LastName" type="text" class="form-control col-md-8" data-bind="value: LastNames"/>
+        <input id="LastName" type="text" class="form-control col-md-8" data-bind="value: LastNames , valueUpdate: 'afterkeydown'"/>
     </div>
     <div class="form-group row">
         <label class="col-md-3">Login</label>
@@ -21,7 +22,7 @@
     </div>
 </form>
 <div style="padding:2%;">
-    <button class="btn btn-primary" id="SaveUser"> Registrar Usuario</button>
+    <button class="btn btn-primary" data-bind="click :  SaveUser"> Registrar Usuario</button>
 </div>
 
 
@@ -44,13 +45,15 @@
 <script>
     function UserViewModel() {
         var self = this;
-        self.Names = ko.observable();
-        self.LastNames = ko.observable();
-        self.Login = ko.observable();
-        self.Email = ko.observable();
-        self.Password = ko.observable();
+        self.Names = ko.observable('');
+        self.LastNames = ko.observable('');
+        self.Login = ko.observable('');
+        self.Email = ko.observable('');
+        self.Password = ko.observable('');
+        self.UserList = ko.observableArray([]);
+        self.UserTable = createUserTable();
 
-        self.UserFormToJson = function () {
+        self.UserFormToJson =  () => {
             return {
                 "Names": self.Names(),
                 "LastNames": self.LastNames(),
@@ -60,7 +63,7 @@
             }
         };
 
-        self.ClearForm = function () {
+        self.ClearForm = () => {
             self.Names('');
             self.LastNames('');
             self.Login('');
@@ -68,75 +71,60 @@
             self.Password('');
         };
 
+        self.CompleteName = ko.computed(() => {
+            var name = self.Names() ? self.Names() : '';
+            var lastName = self.LastNames() ? self.LastNames() : '';
+            return name + " "+lastName;
+        })
+
+        self.Names.subscribe(() => {
+            console.log(userViewModel.Names());
+        });
+
+        self.LoadUserFromServer = () => {
+            $.get('/api/user/list')
+                .then(userList => {
+                    self.UserList(userList);
+                })
+        }
+
+        self.UserList.subscribe(() => {
+            self.UserTable.clear();
+            self.UserList().forEach(user => {
+                AddUserToTable(user);
+            });
+            self.UserTable.draw();
+        });
+
+        self.SaveUser = () => {
+            $.post('/api/user/create', self.UserFormToJson())
+                .then(registeredUser => {
+                    self.UserList.push(registeredUser);
+                    self.ClearForm();
+                });
+        };
+
+        function createUserTable() {
+            return $('table').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+        }
+
+        function AddUserToTable(userData) {
+            self.UserTable.row.add([userData.Id, userData.CompleteName, userData.Login, userData.Email]);
+        }
+
         return this;
     }
-
     var userViewModel = new UserViewModel();
     ko.applyBindings(userViewModel);
-
-
-    function CreateUserTable() {
-        return $('table').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-    }
-
-    var userTable = CreateUserTable();
-
-    function ListUserFromServer() {
-        $.get('/api/user/list')
-            .then(userList => {
-                userList.forEach(user => {
-                    AddUserToTable(user);
-                });
-                userTable.draw();
-            });
-    }
-
-    $('#SaveUser').click(() => {
-        var newUserData = getUserData();
-        $.post('/api/user/create', newUserData)
-            .then(registeredUser => {
-                AddUserToTable(registeredUser)
-                userTable.draw();
-                eraseUserData();
-            });
-    });
-
-    function getUserData() {
-        return {
-            "Names": $('#Name').val(),
-            "LastNames": $('#LastName').val(),
-            "Login": $('#Login').val(),
-            "Email": $('#Email').val(),
-            "Password": $('#Password').val()             
-        }
-    }
-
-    function eraseUserData() {
-        $('#Name').val('');
-        $('#LastName').val('');
-        $('#Login').val('');
-        $('#Email').val('');
-        $('#Password').val('');
-    }
-
-    function AddUserToTable(userData) {
-        userTable.row.add([userData.Id, userData.CompleteName, userData.Login, userData.Email]);
-    }
-
-    ListUserFromServer();
-
-    userTable.on('click', 'tr', () => {
-        var data = userTable.row(this).data();
-        console.log(data);
-    });
-
-    function UpdateTable(){
-        userTable.clear();
-        ListUserFromServer();
-    }
+    userViewModel.LoadUserFromServer();
+  
+    //userTable.on('click', 'tr', () => {
+    //    var data = userTable.row(this).data();
+    //    console.log(data);
+    //});
 </script>
