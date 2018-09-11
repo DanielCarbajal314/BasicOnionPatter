@@ -1,0 +1,64 @@
+﻿
+<form style="padding-top:1%; padding-bottom:1%;" class="col-md-6">
+    <div class="form-group row">
+        <label class="col-md-3">User Name</label>
+        <input id="Name" type="text" class="form-control col-md-8" data-bind="value: UserName" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-3">Message </label>
+        <input id="LastName" type="text" class="form-control col-md-8" data-bind="value: Message" />
+    </div>
+</form>
+<div style="padding:2%;">
+    <button class="btn btn-primary" data-bind="click :  SendMessage"> Registrar Usuario</button>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Message</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: MessageList">
+        <tr>
+            <td data-bind="text: UserName"></td>
+            <td data-bind="text: Message"></td>
+        </tr>
+    </tbody>
+</table>
+
+
+<script>
+    function ChatViewModel() {
+        var self = this;
+        self.UserName = ko.observable('');
+        self.Message = ko.observable('');
+        self.MessageList = ko.observableArray([]);
+        self.chatManager = $.connection.chat;
+
+        self.ClearChatForm = () => {
+            self.Message('');
+        };
+
+        self.SendMessage = () => {
+            self.chatManager.server.pushMessage({
+                UserName: self.UserName(),
+                Message: self.Message()
+            });
+            self.ClearChatForm();
+        };
+
+        self.chatManager.client.NewMessage = (userMessage) => {
+            self.MessageList.push(userMessage);
+        };
+
+        $.connection.hub.start();
+        return this;
+    }
+
+    var chatViewModel = new ChatViewModel();
+    ko.applyBindings(chatViewModel);
+    
+</script>
+
