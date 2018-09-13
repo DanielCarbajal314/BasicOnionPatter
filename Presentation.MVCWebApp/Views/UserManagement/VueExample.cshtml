@@ -1,0 +1,116 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="UserFormView">
+    <form style="padding-top:1%; padding-bottom:1%;" class="col-md-6">
+        <h4>{{UserCompleteName}}</h4>
+        <div class="form-group row" v-on:keypress ="updateCompleteName">
+            <label class="col-md-3">Nombre</label>
+            <input id="Name" type="text" class="form-control col-md-8" v-model="Name" />
+        </div>
+        <div class="form-group row" v-on:keypress ="updateCompleteName">
+            <label class="col-md-3">Apellido</label>
+            <input id="LastName" type="text" class="form-control col-md-8" v-model="LastName" />
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3">Login</label>
+            <input id="Login" type="text" class="form-control col-md-8" v-model="Login" />
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3">Email</label>
+            <input id="Email" type="text" class="form-control col-md-8" v-model="Email" />
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3">Password</label>
+            <input id="Password" type="password" class="form-control col-md-8" v-model="Password" />
+        </div>
+    </form>
+    <div style="padding:2%;">
+        <button class="btn btn-primary" v-on:click="RegisterData"> Registrar Usuario</button>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <table class="table col-md-8 table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Nombre Completo</th>
+                <th>Login</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody id="CuerpoDeLaTabla"></tbody>
+    </table>
+</div>
+
+<script>
+    var app = new Vue({
+        el: '#UserFormView',
+        data: {
+            UserCompleteName: '',
+            Name: '',
+            LastName: '',
+            Login: '',
+            Email: '',
+            Password: '',
+            UserTable: createUserTable()
+        },
+        methods: {
+            ClearUserForm: function () {
+                this.UserCompleteName = '';
+                this.Name = '';
+                this.LastName = '';
+                this.Login = '';
+                this.Email = '';
+                this.Password = '';
+            },
+            RegisterData: function () {
+                var self = this;
+                axios.post('/api/user/create', this.UserFormToJSON())
+                    .then(function (response) {
+                        self.AddUserToTable(response.data);
+                        self.UserTable.draw();
+                        self.ClearUserForm();
+                    });
+            },
+            UserFormToJSON: function () {
+                return {
+                    "Names": this.Name,
+                    "LastNames": this.LastName,
+                    "Login": this.Login,
+                    "Email": this.Email,
+                    "Password": this.Password
+                };
+            },
+            updateCompleteName: function (event) {
+                this.UserCompleteName = this.Name + " " + this.LastName;
+            },
+            AddUserToTable: function (userData) {
+                this.UserTable.row.add([userData.Id, userData.CompleteName, userData.Login, userData.Email]);
+            },
+            LoadUserListFromServer: function () {
+                var self = this;
+                axios.get('/api/user/list')
+                    .then(response => {
+                        var userList = response.data;
+                        userList.forEach(user => {
+                            self.AddUserToTable(user);
+                        });
+                        self.UserTable.draw();
+                    })
+            }
+        }
+    });
+
+    app.LoadUserListFromServer();
+
+    function createUserTable() {
+        return $('table').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+    }
+</script>

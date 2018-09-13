@@ -31,6 +31,11 @@ namespace Presentation.MVCWebApp
                     "~/Scripts/Frameworks/Knockout.js"
                 ));
 
+            bundles.Add(new ScriptBundle("~/bundles/VueStack").Include(
+                "~/Scripts/Frameworks/Vue.js",
+                "~/Scripts/Frameworks/axios.js"
+            ));
+
             BundleTable.EnableOptimizations = false;
 
         }

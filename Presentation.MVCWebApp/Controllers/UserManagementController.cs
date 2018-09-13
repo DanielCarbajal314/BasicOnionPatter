@@ -12,5 +12,10 @@ namespace Presentation.MVCWebApp.Controllers
         {
             return View();
         }
+
+        public ActionResult VueExample()
+        {
+            return View();
+        }
     }
 }
