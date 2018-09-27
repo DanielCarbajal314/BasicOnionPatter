@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation.MVCWebApp", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation.SecureWebAPI", "Presentation.SecureWebAPI\Presentation.SecureWebAPI.csproj", "{1DAAEF36-5DAC-4B2E-BE62-CBB2B27C40E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{80771684-8259-4316-8BB6-6E0BAB569484}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{1DAAEF36-5DAC-4B2E-BE62-CBB2B27C40E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DAAEF36-5DAC-4B2E-BE62-CBB2B27C40E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DAAEF36-5DAC-4B2E-BE62-CBB2B27C40E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80771684-8259-4316-8BB6-6E0BAB569484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80771684-8259-4316-8BB6-6E0BAB569484}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80771684-8259-4316-8BB6-6E0BAB569484}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80771684-8259-4316-8BB6-6E0BAB569484}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +91,7 @@ Global
 		{0F9F62A4-78A4-4DD9-97EC-C58FDE4C4845} = {3C484BAB-9195-46A7-A51D-94E5323E06D5}
 		{E95D70A6-AA13-45DC-B4A7-5A80ABB29472} = {3C484BAB-9195-46A7-A51D-94E5323E06D5}
 		{1DAAEF36-5DAC-4B2E-BE62-CBB2B27C40E4} = {3C484BAB-9195-46A7-A51D-94E5323E06D5}
+		{80771684-8259-4316-8BB6-6E0BAB569484} = {3C484BAB-9195-46A7-A51D-94E5323E06D5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F0987384-A891-4730-B337-E477C86A4115}
